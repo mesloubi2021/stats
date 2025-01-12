@@ -21,6 +21,8 @@ unset border
 set timefmt "%Y-%m-%d"
 set xdata time
 set xtics rotate 3600*24*365.25 nomirror out
+set ytics nomirror
+unset mxtics
 
 set xrange ["2010-01-01":]
 set yrange [0:]
@@ -28,6 +30,9 @@ set yrange [0:]
 set style line 2 \
     linecolor rgb '#ff60ad' \
     dt 1 linewidth 4
+
+set pixmap 1 "stats/curl-symbol-light.png"
+set pixmap 1 at screen 0.35, 0.30 width screen 0.30 behind
 
 # set the format of the dates on the x axis
 set format x "%Y"

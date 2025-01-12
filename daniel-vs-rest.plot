@@ -4,7 +4,7 @@ set terminal svg size 1920,1080 dynamic font ",24"
 # title
 set title "Daniel Stenberg's share of authored commits" font ",48"
 # where's the legend
-set key top center font ",20"
+set key top right horizontal
 
 # Identify the axes
 #set xlabel "Time"
@@ -29,7 +29,7 @@ unset border
 # time formated using this format
 set timefmt "%Y-%m-%d"
 set xdata time
-set ytics 10
+set ytics 10 nomirror
 
 set yrange [0:]
 set xrange ["1999-10-01":]
@@ -37,9 +37,13 @@ set xrange ["1999-10-01":]
 set boxwidth 0.5 relative
 set style fill solid
 
+set pixmap 1 "stats/curl-symbol-light.png"
+set pixmap 1 at screen 0.35, 0.30 width screen 0.30 behind
+
 # set the format of the dates on the x axis
 set format x "%Y"
-set xtics rotate 3600*24*365.25
+set xtics rotate 3600*24*365.25 out nomirror
+unset mxtics
 
 set datafile separator ";"
 plot  'tmp/daniel-vs-rest.csv' using 1:4 with boxes linestyle 3 title "Monthly share of commit count", \

@@ -10,10 +10,12 @@ set key top left
 #set xlabel "Time"
 set ylabel "Number of protocols"
 set xtics rotate 3600*24*365.25 nomirror
+unset mxtics
+set ytics nomirror
 
 set style line 1 \
     linecolor rgb '#0060ad' \
-    linetype 1 linewidth 4 \
+    linetype 1 linewidth 2 \
     pointtype 6
 
 set grid
@@ -24,7 +26,10 @@ set timefmt "%Y-%m-%d"
 set xdata time
 set yrange [0:]
 
+set pixmap 1 "stats/curl-symbol-light.png"
+set pixmap 1 at screen 0.35, 0.30 width screen 0.30 behind
+
 # set the format of the dates on the x axis
 set format x "%Y"
 set datafile separator ";"
-plot 'tmp/protocols-over-time.csv' using 1:3 with linespoints linestyle 1 title "", 'tmp/protocols-over-time.csv' using 1:3:2 with labels offset -2,0.4 font ",18" tc "#ff0000" title ""
+plot 'tmp/protocols-over-time.csv' using 1:3 with linespoints linestyle 1 title "", 'tmp/protocols-over-time.csv' using 1:3:2 with labels right rotate by -22 offset -.5,0.2 font ",18" tc "#ff0000" title ""

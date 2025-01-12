@@ -21,6 +21,7 @@ set style line 2 \
 # don't draw the left-yaxies tics on the right side
 set ytics nomirror
 set xtics 3600*24*365.25 nomirror rotate
+unset mxtics
 
 set y2label "Bugfixes per day" tc "#ff60ad"
 set y2tics
@@ -30,6 +31,9 @@ unset border
 # time formated using this format
 set timefmt "%Y-%m-%d"
 set xdata time
+
+set pixmap 1 "stats/curl-symbol-light.png"
+set pixmap 1 at screen 0.35, 0.30 width screen 0.30 behind
 
 # set the format of the dates on the x axis
 set format x "%Y"

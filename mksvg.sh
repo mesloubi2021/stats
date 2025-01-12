@@ -8,6 +8,15 @@ temp=tmp
 # store the SVG output here
 output=`mktemp -d svg-XXXXXX`
 
+perl stats/date-of-year.pl > $temp/date-of-year.csv
+gnuplot -c stats/date-of-year.plot > $output/date-of-year.svg
+
+perl stats/month-of-year.pl > $temp/month-of-year.csv
+gnuplot -c stats/month-of-year.plot > $output/month-of-year.svg
+
+perl stats/weekday-of-year.pl > $temp/weekday-of-year.csv
+gnuplot -c stats/weekday-of-year.plot > $output/weekday-of-year.svg
+
 perl stats/contrib-tail.pl > $temp/contrib-tail.csv
 gnuplot -c stats/contrib-tail.plot > $output/contrib-tail.svg
 
@@ -33,7 +42,7 @@ gnuplot -c stats/files-over-time.plot > $output/files-over-time.svg
 perl stats/bugfix-frequency.pl $webroot > $temp/bugfix-frequency.csv
 gnuplot -c stats/bugfix-frequency.plot > $output/bugfix-frequency.svg
 
-perl stats/API-calls-over-time.pl | cut "-d;" -f2- > $temp/API-calls-over-time.csv
+perl stats/API-calls-over-time.pl > $temp/API-calls-over-time.csv
 gnuplot -c stats/API-calls-over-time.plot > $output/API-calls-over-time.svg
 
 perl stats/protocols-over-time.pl > $temp/protocols-over-time.csv
@@ -62,6 +71,9 @@ gnuplot -c stats/daniel-commit-share.plot > $output/daniel-commit-share.svg
 
 perl stats/authors-per-year.pl > $temp/authors-per-year.csv
 gnuplot -c stats/authors-per-year.plot > $output/authors-per-year.svg
+
+perl stats/authors-active.pl > $temp/authors-active.csv
+gnuplot -c stats/authors-active.plot > $output/authors-active.svg
 
 perl stats/commits-per-year.pl > $temp/commits-per-year.csv
 gnuplot -c stats/commits-per-year.plot > $output/commits-per-year.svg
@@ -98,7 +110,7 @@ gnuplot -c stats/setopts-over-time.plot > $output/setopts-over-time.svg
 perl stats/days-per-release.pl $webroot > $temp/days-per-release.csv
 gnuplot -c stats/days-per-release.plot > $output/days-per-release.svg
 
-perl stats/cmdline-options-over-time.pl | cut '-d;' -f2- > $temp/cmdline-options-over-time.csv
+perl stats/cmdline-options-over-time.pl > $temp/cmdline-options-over-time.csv
 gnuplot -c stats/cmdline-options-over-time.plot > $output/cmdline-options-over-time.svg
 
 perl stats/contributors-over-time.pl | cut '-d;' -f2- > $temp/contributors-over-time.csv
@@ -200,6 +212,36 @@ gnuplot -c stats/releases-per-year.plot > $output/releases-per-year.svg
 perl stats/cpy-over-time.pl > $temp/cpy-over-time.csv
 gnuplot -c stats/cpy-over-time.plot > $output/cpy-over-time.svg
 
+perl stats/strncpy-over-time.pl > $temp/strncpy-over-time.csv
+gnuplot -c stats/strncpy-over-time.plot > $output/strncpy-over-time.svg
+
+perl stats/sscanf-over-time.pl > $temp/sscanf-over-time.csv
+gnuplot -c stats/sscanf-over-time.plot > $output/sscanf-over-time.svg
+
+perl stats/complexity.pl > $temp/complexity.csv
+gnuplot -c stats/complexity.plot > $output/complexity.svg
+gnuplot -c stats/funclen.plot > $output/funclen.svg
+
+perl stats/codeage.pl > $temp/codeage.csv
+gnuplot -c stats/codeage.plot > $output/codeage.svg
+
+perl stats/top-cwe.pl $webroot > $temp/top-cwe.csv
+gnuplot -c stats/top-cwe.plot > $output/top-cwe.svg
+
+perl stats/testinfra-over-time.pl > $temp/testinfra-over-time.csv
+gnuplot -c stats/testinfra-over-time.plot > $output/testinfra-over-time.svg
+
+perl stats/plotdivision.pl $temp/testinfra-over-time.csv $temp/lines-over-time.csv 0:1 0:1 1000 > $temp/testinfra-per-line.csv
+gnuplot -c stats/testinfra-per-line.plot > $output/testinfra-per-line.svg
+
+perl stats/plotdivision.pl $temp/testinfra-over-time.csv $temp/tests-over-time.csv 0:1 1:2 > $temp/testinfra-per-test.csv
+gnuplot -c stats/testinfra-per-test.plot > $output/testinfra-per-test.svg
+
+# Added LOC per LOC still present
+perl stats/addedcode.pl > $temp/addedcode.csv
+perl stats/plotdivision.pl $temp/addedcode.csv $temp/lines-over-time.csv  0:1 0:1 > $temp/added-per-line.csv
+gnuplot -c stats/added-per-line.plot > $output/added-per-line.svg
+
 # lines of docs per KLOC
 #
 # uses already generated CSV files to make a new one
@@ -227,38 +269,53 @@ gnuplot -c stats/lines-per-author.plot > $output/lines-per-author.svg
 perl stats/plotdivision.pl $temp/authorremains.csv $temp/lines-over-time.csv 0:1 0:1 1000 > $temp/remains-per-kloc.csv
 gnuplot -c stats/remains-per-kloc.plot > $output/remains-per-kloc.svg
 
+# top-40 authors with production code remaining in master
+perl stats/top-remains.pl > $temp/top-remains.csv
+gnuplot -c stats/top-remains.plot > $output/top-remains.svg
+
+# CVE severity pie chart
+perl stats/cve-pie-chart.pl $webroot > $temp/cve-pie-chart.csv
+gnuplot -c stats/cve-pie-chart.plot > $output/cve-pie-chart.svg
+
 cat >stats.list <<EOF
-95-percent = $output/95-percent.svg
-90-percent = $output/90-percent.svg
-80-percent = $output/80-percent.svg
-70-percent = $output/70-percent.svg
-60-percent = $output/60-percent.svg
 50-percent = $output/50-percent.svg
+60-percent = $output/60-percent.svg
+70-percent = $output/70-percent.svg
+80-percent = $output/80-percent.svg
+90-percent = $output/90-percent.svg
+95-percent = $output/95-percent.svg
+added-per-line = $output/added-per-line.svg
 api-calls = $output/API-calls-over-time.svg
-authors = $output/authors.svg
-authors-per-month = $output/authors-per-month.svg
-authors-per-year = $output/authors-per-year.svg
 authorremains = $output/authorremains.svg
 authorremains-top = $output/authorremains-top.svg
+authors = $output/authors.svg
+authors-active = $output/authors-active.svg
+authors-per-month = $output/authors-per-month.svg
+authors-per-year = $output/authors-per-year.svg
 backends = $output/backends-over-time.svg
 bugbounty = $output/bugbounty-over-time.svg
 bugbounty-amounts = $output/bugbounty-amounts.svg
 bugfix-frequency = $output/bugfix-frequency.svg
-c-vulns = $output/c-vulns.svg
 c-reports = $output/c-reports.svg
+c-vulns = $output/c-vulns.svg
 ci-jobs = $output/CI-jobs-over-time.svg
 ci-platforms = $output/CI-platforms.svg
 ci-services = $output/CI-services.svg
 cmdline-options-over-time = $output/cmdline-options-over-time.svg
+codeage = $output/codeage.svg
 comments = $output/comments.svg
 commits = $output/commits-over-time.svg
 commits-per-month = $output/commits-per-month.svg
 commits-per-year = $output/commits-per-year.svg
-contribs-release = $output/contributors-per-release.svg
+complexity = $output/complexity.svg
 contrib-tail = $output/contrib-tail.svg
+contribs-release = $output/contributors-per-release.svg
 contributors = $output/contributors-over-time.svg
 coreteam-per-year = $output/coreteam-per-year.svg
+cve-pie = $output/cve-pie-chart.svg
 cve-time = $output/cve-age.svg
+cwe-top = $output/top-cwe.svg
+daily-commits = $output/date-of-year.svg
 daniel-commits = $output/daniel-commit-share.svg
 daniel-vs-rest = $output/daniel-vs-rest.svg
 days-per-release = $output/days-per-release.svg
@@ -271,6 +328,7 @@ filesize = $output/filesize-over-time.svg
 firsttimers = $output/firsttimers.svg
 fixtime = $output/cve-fixtime.svg
 func-calls = $output/cpy-over-time.svg
+funclen = $output/funclen.svg
 github-age = $output/gh-age.svg
 github-fixes = $output/gh-fixes.svg
 github-monthly = $output/gh-monthly.svg
@@ -284,53 +342,69 @@ lines-per-test = $output/lines-per-test.svg
 loc = $output/lines-over-time.svg
 mail = $output/mail.svg
 manpages = $output/manpages-over-time.svg
+monthly-commits = $output/month-of-year.svg
 protocols = $output/protocols-over-time.svg
 releases = $output/release-number.svg
 releases-per-year = $output/releases-per-year.svg
 setopts = $output/setopts-over-time.svg
 sev-per-year = $output/sev-per-year.svg
+strncpy = $output/strncpy-over-time.svg
+sscanf = $output/sscanf-over-time.svg
 symbols = $output/symbols-over-time.svg
+testinfra = $output/testinfra-over-time.svg
+testinfra-kloc = $output/testinfra-per-line.svg
+testinfra-test = $output/testinfra-per-test.svg
 tests = $output/tests-over-time.svg
 third-parties = $output/3rdparty-over-time.svg
 todo = $output/todo-over-time.svg
+top40 = $output/top-remains.svg
+vulns-per-kloc = $output/knownvulns-per-line.svg
 vulns-per-year = $output/vulns-per-year.svg
 vulns-plot = $output/vulns-plot.svg
 vulns-releases = $output/vulns-releases.svg
-vulns-per-kloc = $output/knownvulns-per-line.svg
+weekly-commits = $output/weekday-of-year.svg
 EOF
 
 # Use the same names but point to the used CSV/data/input file
 cat >stats.data <<EOF
-95-percent = $temp/80-percent.csv
-90-percent = $temp/80-percent.csv
-80-percent = $temp/80-percent.csv
-70-percent = $temp/70-percent.csv
-60-percent = $temp/60-percent.csv
 50-percent = $temp/50-percent.csv
+60-percent = $temp/60-percent.csv
+70-percent = $temp/70-percent.csv
+80-percent = $temp/80-percent.csv
+90-percent = $temp/90-percent.csv
+95-percent = $temp/95-percent.csv
+added-per-line = $temp/added-per-line.csv
 api-calls = $temp/API-calls-over-time.csv
-authors = $temp/authors.csv
-authors-per-month = $temp/authors-per-month.csv
-authors-per-year = $temp/authors-per-year.csv
 authorremains = $temp/authorremains.csv
 authorremains-top = $temp/authorremains.csv
+authors = $temp/authors.csv
+authors-active = $temp/authors-active.csv
+authors-per-month = $temp/authors-per-month.csv
+authors-per-year = $temp/authors-per-year.csv
+backends = $temp/tls-over-time.csv
 bugbounty = $temp/bugbounty-over-time.csv
 bugbounty-amounts = $temp/bugbounty-amounts.csv
 bugfix-frequency = $temp/bugfix-frequency.csv
-c-vulns = $output/c-vulns-over-time.csv
-c-reports = $output/c-vulns-reports.csv
+c-reports = $temp/c-vuln-reports.csv
+c-vulns = $temp/c-vuln-over-time.csv
 ci-jobs = $temp/CI.csv
 ci-platforms = $temp/CI-platforms.csv
 ci-services = $temp/CI.csv
 cmdline-options-over-time = $temp/cmdline-options-over-time.csv
+codeage = $temp/codeage.csv
 comments = $temp/comments.csv
+commits = $temp/commits-over-time.csv
 commits-per-month = $temp/commits-per-month.csv
 commits-per-year = $temp/commits-per-year.csv
-commits = $temp/commits-over-time.csv
-contribs-release = $temp/contributors-per-release.csv
+complexity = $temp/complexity.csv
 contrib-tail = $temp/contrib-tail.csv
+contribs-release = $temp/contributors-per-release.csv
 contributors = $temp/contributors-over-time.csv
 coreteam-per-year = $temp/coreteam-per-year.csv
+cve-pie = $temp/cve-pie-chart.csv
 cve-time = $temp/cve-age.csv
+cwe-top = $temp/top-cwe.csv
+daily-commits = $temp/date-of-year.csv
 daniel-commits = $temp/daniel-commit-share.csv
 daniel-vs-rest = $temp/daniel-vs-rest.csv
 days-per-release = $temp/days-per-release.csv
@@ -342,12 +416,13 @@ files = $temp/files-over-time.csv
 filesize = $temp/filesize-over-time.csv
 firsttimers = $temp/firsttimers.csv
 fixtime = $temp/cve-fixtime.csv
-func-calls = $output/cpy-over-time.csv
+func-calls = $temp/cpy-over-time.csv
+funclen = $temp/complexity.csv
 github-age = $temp/gh-age.csv
 github-fixes = $temp/gh-fixes.csv
 github-monthly = $temp/gh-monthly.csv
 github-open = $temp/gh-open.csv
-high-vuln = $output/high-reports.csv
+high-vuln = $temp/high-vuln-reports.csv
 http-versions = $temp/http-over-time.csv
 lines = $temp/lines-person.csv
 lines-per-author = $temp/lines-per-author.csv
@@ -356,20 +431,27 @@ lines-per-test = $temp/lines-per-test.csv
 loc = $temp/lines-over-time.csv
 mail = $temp/mail.csv
 manpages = $temp/manpages-over-time.csv
+monthly-commits = $temp/month-of-year.csv
 protocols = $temp/protocols-over-time.csv
 releases = $temp/release-number.csv
 releases-per-year = $temp/releases-per-year.csv
 setopts = $temp/setopts-over-time.csv
-sev-per-year = $output/sev-per-year.csv
+sev-per-year = $temp/sev-per-year.csv
+strncpy = $temp/strncpy-over-time.csv
+sscanf = $temp/sscanf-over-time.csv
 symbols = $temp/symbols-over-time.csv
+testinfra = $temp/testinfra-over-time.csv
+testinfra-kloc = $temp/testinfra-per-line.csv
+testinfra-test = $temp/testinfra-per-test.csv
 tests = $temp/tests-over-time.csv
 third-parties = $temp/3rdparty-over-time.csv
-backends = $temp/tls-over-time.csv
 todo = $temp/todo-over-time.csv
+top40 = $temp/top-remains.csv
+vulns-per-kloc = $temp/knownvulns-per-line.csv
 vulns-per-year = $temp/vulns-per-year.csv
 vulns-plot = $temp/vulns-over-time.csv
 vulns-releases = $temp/vulns-releases.csv
-vulns-per-kloc = $temp/knownvulns-per-line.csv
+weekly-commits = $temp/weekday-of-year.csv
 EOF
 
 # make the dir world readable

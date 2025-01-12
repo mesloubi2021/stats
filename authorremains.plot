@@ -2,7 +2,7 @@
 set terminal svg size 1920,1080 dynamic font ",24"
 
 # title
-set title "Authors with code left in product code\n{/*0.6lines attributed to them by git blame -CCC in src/, lib/ or include/}" font ",48"
+set title "Authors with code left in product code\n{/*0.6lines attributed to them by git blame -CCC}" font ",48"
 # where's the legend
 set key top left
 
@@ -37,10 +37,14 @@ set timefmt "%Y-%m-%d"
 set xdata time
 set xrange ["2010-01-01":]
 
+set pixmap 1 "stats/curl-symbol-light.png"
+set pixmap 1 at screen 0.35, 0.30 width screen 0.30 behind
+
 # set the format of the dates on the x axis
 set format x "%Y"
-set xtics rotate 3600*24*365.25 nomirror
+set xtics rotate 3600*24*365.25 nomirror out
 unset mxtics
+set ytics nomirror
 set datafile separator ";"
 plot 'tmp/authorremains.csv' using 1:2 with lines linestyle 1 title "one line or more", \
  'tmp/authorremains.csv' using 1:3 with lines linestyle 2 title "10 lines or more", \

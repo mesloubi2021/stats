@@ -12,37 +12,37 @@ set ylabel "Number of backends"
 set style line 1 \
     linecolor rgb '#0060ad' \
     linetype 2 linewidth 1 \
-    pointtype 7
+    pointtype 7 pointsize 0.5
 
 set style line 2 \
     linecolor rgb '#808080' \
     linetype 1 linewidth 1 \
-    pointtype 7
+    pointtype 7 pointsize 0.5
 
 set style line 3 \
     linecolor rgb '#c0c080' \
     linetype 1 linewidth 1 \
-    pointtype 7
+    pointtype 7 pointsize 0.5
 
 set style line 4 \
     linecolor rgb '#c000c0' \
     linetype 1 linewidth 1 \
-    pointtype 7
+    pointtype 7 pointsize 0.5
 
 set style line 5 \
     linecolor rgb '#c00040' \
     linetype 1 linewidth 1 \
-    pointtype 11
+    pointtype 11 pointsize 0.5
 
 set style line 6 \
     linecolor rgb '#900040' \
     linetype 1 linewidth 1 \
-    pointtype 17
+    pointtype 17 pointsize 0.5
 
 set style line 7 \
     linecolor rgb '#300090' \
     linetype 1 linewidth 1 \
-    pointtype 17
+    pointtype 17 pointsize 0.5
 
 set grid
 unset border
@@ -51,8 +51,12 @@ unset border
 set timefmt "%Y-%m-%d"
 set xdata time
 set yrange [0:]
-set ytics 1
+set ytics 1 nomirror
 set xtics rotate 3600*24*365.25 nomirror
+unset mxtics
+
+set pixmap 1 "stats/curl-symbol-light.png"
+set pixmap 1 at screen 0.35, 0.30 width screen 0.30 behind
 
 # set the format of the dates on the x axis
 set format x "%Y"
@@ -64,10 +68,10 @@ plot 'tmp/tls-over-time.csv' using 1:3 with linespoints linestyle 1 title "TLS",
  'tmp/h3-over-time.csv' using 1:3 with linespoints linestyle 3 title "HTTP/3", \
  'tmp/idn-over-time.csv' using 1:3 with linespoints linestyle 6 title "IDN", \
  'tmp/resolver-over-time.csv' using 1:3 with linespoints linestyle 7 title "resolver", \
-'tmp/tls-over-time.csv' using 1:3:2 with labels center offset -2,1 font ",14" rotate by -22 tc "#0060ad" title "", \
- 'tmp/ssh-over-time.csv' using 1:3:2 with labels offset -2,1 font ",14" rotate by -22 tc "#808080" title "", \
- 'tmp/h1-over-time.csv' using 1:3:2 with labels offset -3,0.4 font ",14" rotate by -22 tc "#c000c0" title "", \
- 'tmp/h2-over-time.csv' using 1:3:2 with labels offset -3,0.5 font ",14" rotate by -22 tc "#c00040" title "", \
- 'tmp/h3-over-time.csv' using 1:3:2 with labels offset -2,1 font ",14" rotate by -22 tc "#c0c080" title "", \
- 'tmp/idn-over-time.csv' using 1:3:2 with labels offset -1,1 font ",14" rotate by -22 tc "#900040" title "", \
- 'tmp/resolver-over-time.csv' using 1:3:2 with labels offset -1,1 font ",14" rotate by -22 tc "#300090" title ""
+'tmp/tls-over-time.csv' using 1:3:2 with labels right offset -0.5,0.2 font ",14" rotate by -22 tc "#0060ad" title "", \
+ 'tmp/ssh-over-time.csv' using 1:3:2 with labels right offset -0.5,0.2 font ",14" rotate by -22 tc "#808080" title "", \
+ 'tmp/h1-over-time.csv' using 1:3:2 with labels right offset -0.5,0.2 font ",14" rotate by -22 tc "#c000c0" title "", \
+ 'tmp/h2-over-time.csv' using 1:3:2 with labels right offset -0.5,0.2 font ",14" rotate by -22 tc "#c00040" title "", \
+ 'tmp/h3-over-time.csv' using 1:3:2 with labels right offset -0.5,0.2 font ",14" rotate by -22 tc "#c0c080" title "", \
+ 'tmp/idn-over-time.csv' using 1:3:2 with labels right offset -0.5,0.2 font ",14" rotate by -22 tc "#900040" title "", \
+ 'tmp/resolver-over-time.csv' using 1:3:2 with labels right offset -0.5,0.2 font ",14" rotate by -22 tc "#300090" title ""

@@ -18,10 +18,15 @@ set y2tics
 set timefmt "%Y-%m-%d"
 set xdata time
 
+set pixmap 1 "stats/curl-symbol-light.png"
+set pixmap 1 at screen 0.35, 0.30 width screen 0.30 behind
+
 # set the format of the dates on the x axis
 set format x "%Y"
-set xtics rotate 3600*24*365.25 nomirror
-set ytics 10
+set format y2 "%.0s%c"
+set xtics rotate 3600*24*365.25 nomirror out
+unset mxtics
+set ytics nomirror
 
 set style line 1 \
     linecolor rgb '#FF4040' \
@@ -30,7 +35,7 @@ set style line 1 \
 
 set style line 2 \
     linecolor rgb '#800080' \
-    linetype 2 linewidth 3
+    linetype 2 dt "." linewidth 3
 
 set style line 3 \
     linecolor rgb '#40C040' \
@@ -50,7 +55,7 @@ set style line 5 \
 set datafile separator ";"
 plot \
  'tmp/c-vuln-over-time.csv' using 1:4 with linespoints linestyle 3 title "All vulnerabilities not C mistakes", \
- 'tmp/lines-over-time.csv' using 1:2 axis x1y2 with lines linestyle 2 title "Lines of code", \
  'tmp/c-vuln-over-time.csv' using 1:3 with linespoints linestyle 1 title "All C mistake vulnerabilities", \
  'tmp/c-vuln-over-time.csv' using 1:6 with linespoints linestyle 5 title "high/critical vulnerabilities not C mistakes", \
- 'tmp/c-vuln-over-time.csv' using 1:5 with linespoints linestyle 4 title "high/critical C mistake vulnerabilities"
+ 'tmp/c-vuln-over-time.csv' using 1:5 with linespoints linestyle 4 title "high/critical C mistake vulnerabilities", \
+ 'tmp/lines-over-time.csv' using 1:2 axis x1y2 with lines linestyle 2 title "Lines of code"

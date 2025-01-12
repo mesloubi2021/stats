@@ -21,6 +21,9 @@ unset border
 set timefmt "%Y-%m-%d"
 set xdata time
 
+set pixmap 1 "stats/curl-symbol-light.png"
+set pixmap 1 at screen 0.35, 0.30 width screen 0.30 behind
+
 # set the format of the dates on the x axis
 set format x "%Y"
 set datafile separator ";"
@@ -33,7 +36,9 @@ set yrange [0:]
 
 dayoffset = '30'
 set xrange ["2009-06-".dayoffset:]
-set xtics 3600*24*365.25 nomirror
-set mxtics 1
+set xtics rotate 3600*24*365.25 nomirror out
+unset mxtics
+set ytics nomirror
 
-plot 'tmp/authors-per-year.csv' using 1:2 with boxes title "All authors" fc 'green', 'tmp/authors-per-year.csv' using (strcol(1)[1:8].dayoffset):3 with boxes title "First-time authors"
+plot 'tmp/authors-per-year.csv' using 1:2 with boxes title "All authors" fc 'green', 'tmp/authors-per-year.csv' using (strcol(1)[1:8].dayoffset):3 with boxes title "First-time authors", \
+ 'tmp/authors-per-year.csv' using 1:2:2 with labels title "" offset 0,.5 font ", 20" tc lt 1
